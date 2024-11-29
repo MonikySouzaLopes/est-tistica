@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cálculo de Correlação</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Cálculo de Correlação</h2>
+    <p>Insira duas listas de números separados por vírgulas:</p>
+    <input type="text" id="dataX" placeholder="Digite os dados de X, ex: 1,2,3,4">
+    <input type="text" id="dataY" placeholder="Digite os dados de Y, ex: 4,3,2,1">
+    <button onclick="calculateCorrelation()">Calcular Correlação</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculateCorrelation() {
+      const xInput = document.getElementById("dataX").value;
+      const yInput = document.getElementById("dataY").value;
+
+      // Convert inputs to arrays of numbers
+      const x = xInput.split(",").map(Number);
+      const y = yInput.split(",").map(Number);
+
+      // Check if both arrays have the same length
+      if (x.length !== y.length || x.length === 0) {
+        document.getElementById("result").textContent = "Os dados de X e Y devem ter o mesmo número de valores.";
+        return;
+      }
+
+      // Calculate means
+      const meanX = x.reduce((a, b) => a + b, 0) / x.length;
+      const meanY = y.reduce((a, b) => a + b, 0) / y.length;
+
+      // Calculate correlation
+      let numerator = 0;
+      let denominatorX = 0;
+      let denominatorY = 0;
+
+      for (let i = 0; i < x.length; i++) {
+        const diffX = x[i] - meanX;
+        const diffY = y[i] - meanY;
+
+        numerator += diffX * diffY;
+        denominatorX += diffX ** 2;
+        denominatorY += diffY ** 2;
+      }
+
+      const correlation = numerator / Math.sqrt(denominatorX * denominatorY);
+
+      // Display result
+      document.getElementById("result").textContent = `Correlação de Pearson: ${correlation.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
